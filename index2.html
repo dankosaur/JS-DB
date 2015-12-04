@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Effective JavaScript: Frogger</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+<p id="tester1_buyButtons"></p>
+
+<p id="tester1_generatorButtons"></p>
+<p id="tester1_handButtons"></p>
+
+<p id="tester1_currentState"></p>
+<p id="tester1_combat"></p>
+--------------------------------------------------------<br/>
+<button onclick=combat()>Combat/EndTurn</button>
+<button onclick=startTurn()>startTurn</button>
+<button onclick=showWorldState()>Show World State</button>
+<br/>
+
+
+---------------------------------------------------------<br/>
+<p id="tester2_buyButtons"></p>
+
+<p id="tester2_generatorButtons"></p>
+<p id="tester2_handButtons"></p>
+
+<p id="tester2_currentState"></p>
+<p id="tester2_combat"></p>
+
+
+
+
+
+
+<form action="">
+      		<button>End Turn</button>
+      		
+    	</form>
+
+
+</body>
+<script src="js/sugar.min.js"></script>
+<script src="js/app2.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  		var socket = io();
+  		var canYouSeeThis=["asdasd","asdasd"]
+  		$(document).ready(function (){
+	  		var socket = io();
+	  		//$('form').submit(function(){
+	  		//	socket.emit('chat message', $('#m').val());
+	  		//	$('#m').val('');
+	  		//	return false
+	  		//});
+
+	  		$('form').submit(function(){
+	  			//console.log(currPlayer.hand)
+	  			stringified=JSON.stringify(currPlayer.hand);
+	  			console.log(stringified);
+	  			//socket.emit('end turn', currPlayer.hand);
+	  			//$('#c').val('');
+	  			return false
+	  		});
+
+	  	});
+
+
+
+	  	socket.on('chat message', function(msg){
+	  		//$('#messages').append($('<li>').text(msg));
+	  		canYouSeeThis=msg
+	  		console.log(canYouSeeThis)
+	  	});
+
+	  	socket.on('end turn', function(asd){
+	  		//$('#messages').append($('<li>').text(msg));
+	  		console.log(asd)
+
+	  		//combat();
+	  		//throwanerror
+	  		//currPlayer=asd
+	  		//console.log("received: "+asd)
+	  		//console.log(currPlayer)
+	  	});
+ </script>
+
+</html>

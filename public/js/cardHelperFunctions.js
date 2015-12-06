@@ -47,6 +47,13 @@ var chMoney=function(playerAndAmount) //toDo, figure out how to put this in a se
     }
     amount=playerAndAmount[1]
     player.money+=amount; //because is called by player or a card's 'cardowner'
+
+    console.log('playerAndAmount')
+    //console.log(gent)
+
+    //if(gent){
+    //    console.log("played as generator")
+    //}
 }
 
 var chCombat=function(playerAndAmount) //toDo, figure out how to put this in a separate file
@@ -63,4 +70,11 @@ var chCombat=function(playerAndAmount) //toDo, figure out how to put this in a s
 
     amount=playerAndAmount[1]
     player.combat+=amount; //because is called by player or a card's 'cardowner'
+}
+
+function genEffects(cardName){
+    if (cardName=='copper') // remove this later --- proof of principle
+    {
+        console.log('played copper as a generator')
+    }
 }

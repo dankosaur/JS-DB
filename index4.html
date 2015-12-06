@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>JS DB</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<table>
+	<tr>
+	<td>
+		<tr>
+			<td width="100">
+				<p id="enemy_state"></p>
+			</td>
+			<td width="300" align="left">
+
+				<p id="short_log" style="font-size:12px"></p>
+				<font color="red">
+				<p id="notifications"><br/></p>
+				</font>
+			</td>
+			<td width="200">
+				Eventually chat goes here
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p id="your_state"></p>
+				<button onclick=startTurn()>startTurn</button>
+				<button onclick=showWorldState()>Show World State</button>
+				<form action="">
+      			<button>Combat/EndTurn</button>
+      			</form>
+			</td>
+			<td align="left">
+				<p id="generators"></p>
+				<p id="hand"></p>
+				<p id="decisions"></p>
+			</td>
+			<td>
+			<p id="buy_cards"></p>
+			</td>
+
+		</tr>
+	</td>
+	</tr>
+</table>
+<script>
+var player1
+var player2
+var buyListAmount
+</script>
+
+<script src="js/sugar.min.js"></script> 
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="js/buyCards.js"></script>
+<script src="js/app2.js"></script>
+<script src="js/cardHelperFunctions.js"></script>
+
+
+<script>
+  		var socket = io();
+  		var canYouSeeThis=["asdasd","asdasd"]
+  		//var CircularJSON = window.CircularJSON
+ 		// , obj = { foo: 'bar' }
+ 		// , str
+ 		// ;
+
+  		$(document).ready(function (){
+	  		var socket = io();
+	  		
+	  		$('form').submit(function(){
+	  			try{
+
+	  			combat(); // right, it won't wait for input. so if I want the turn to happen afterwards. need to make that an effect that occurs after the interrupt.
+	  			
+	  			
+	  			
+	  			$('#c').val('');
+	  			return false
+	  			}
+	  			catch(err){
+	  				console.log('ERROR:')
+	  				console.log(err.message);
+	  			}
+	  			return false
+	  		});
+
+	  	});
+
+  		//
+  		//Tell each user what player they are.
+  		//
+  		socket.on('set player', function(msg){
+	  		//$('#messages').append($('<li>').text(msg));
+	  		yourPlayer=msg
+	  		if ('player1'===yourPlayer){
+    		yourPlayerPlayer=player1
+			disableButtons=0;
+	  		//updateOverall();
+	  		}
+			else{
+   			 yourPlayerPlayer=player2
+   			 disableButtons=1;
+   			 updateOverall();
+			}
+	  		addNotification('You are '+msg)
+	  	});
+
+	  	socket.on('receive log', function(msg){
+	  		addFromOpponent(msg)
+	  	});
+
+	  	socket.on('receive overall', function(overall){
+	  		console.log('received overall')
+	  		//currPlayer=overall[0]//for debug purposes
+	  		//player1=overall[0];
+	  		
+
+	  		for (item in overall[0]){
+	  			player1[item]=overall[0][item]
+	  		}
+	  		
+	  		piles=["deck","hand","discard","inPlay", "justPlayedGen", "inactGen", "actGen", "usedGen"]
+	  		for (index in piles){
+	  			pile=piles[index]
+	  			player1[pile]=[]
+	  			for (item in overall[0][pile]){
+	  				car=overall[0][pile][item]
+	  				addCardAfterTransfer(car.name,car.description,car.price,car.effects,player1[pile]) //TODO: if I change card structure will have to change this line -- have it iterate over card properties?
+	  			}
+	  		}
+	  		///ugly copy of the code above but replacing player1 with player2 and overall 0 with overall 1
+			for (item in overall[1]){
+	  			player2[item]=overall[1][item]
+	  		}
+	  		
+	  		piles=["deck","hand","discard","inPlay", "justPlayedGen", "inactGen", "actGen", "usedGen"]
+	  		for (index in piles){
+	  			pile=piles[index]
+	  			player2[pile]=[]
+	  			for (item in overall[1][pile]){
+	  				car=overall[1][pile][item]
+	  				addCardAfterTransfer(car.name,car.description,car.price,car.effects,player2[pile]) //TODO: if I change card structure will have to change this line -- have it iterate over card properties?
+	  			}
+	  		}
+
+	  		buyListAmount=overall[2];
+
+
+
+	  		updateOverall('from opponent')
+	  	});
+
+	  	socket.on('chat message', function(msg){
+	  		//$('#messages').append($('<li>').text(msg));
+	  		canYouSeeThis=msg
+	  		console.log(canYouSeeThis)
+	  	});
+
+	  	socket.on('end turn', function(asd){
+	  		//$('#messages').append($('<li>').text(msg));
+	  		console.log(asd);
+	  		startTurn();
+	  		//throwanerror
+	  		//currPlayer=asd
+	  		//console.log("received: "+asd)
+	  		//console.log(currPlayer)
+	  	});
+
+	  	socket.on('say to single user', function(asd){
+	  		//didThisHappen=true
+
+	  		console.log(asd);
+	  	});
+
+</script>
+
+</html>

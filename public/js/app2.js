@@ -476,7 +476,7 @@ var attack=function(){
             enemy.points+=enemy.wall;
             enemy.wall=0;
         }
-        addToLog(currPlayer.name+' attacked '+enemy.name+' for '+currPlayer.combat+ ' damage, bringing '+ enemy.name+' to ' '+enemy.wall+' wall and '+enemy.points+' points');
+        addToLog(currPlayer.name+' attacked '+enemy.name+' for '+currPlayer.combat+ ' damage, bringing '+ enemy.name+' to '+enemy.wall+' wall and '+enemy.points+' points');
         if (enemy.points < 0){
            addCard('ruin',this.description,this.cost,[ ["chCombat",[currPlayer,0]]],enemy.discard,"free"); // add a ruin to players that drop below 0
            enemy.points=recoveryPoints;
